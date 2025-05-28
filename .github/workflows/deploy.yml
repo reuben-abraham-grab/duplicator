@@ -27,10 +27,22 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
-      - name: Build
+      - name: Print environment info
+        run: |
+          node -v
+          npm -v
+          pwd
+          ls -al
+          env
+      - name: TypeScript Build
         run: |
           set -o pipefail
-          npm run build 2>&1 | tee build.log
+          npx tsc -b 2>&1 | tee tsc.log
+          exit ${PIPESTATUS[0]}
+      - name: Vite Build
+        run: |
+          set -o pipefail
+          npx vite build 2>&1 | tee vite.log
           exit ${PIPESTATUS[0]}
       - name: Setup Pages
         uses: actions/configure-pages@v4
